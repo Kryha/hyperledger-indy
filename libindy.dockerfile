@@ -1,4 +1,4 @@
-FROM rust:slim
+FROM rust:slim as builder
 
 LABEL maintainer="dan@kryha.io"
 
@@ -26,3 +26,7 @@ RUN cd /tmp && \
 
 RUN git clone https://github.com/hyperledger/indy-sdk.git && \
     cd ./indy-sdk/libindy && cargo build --release
+
+FROM alpine:latest
+
+COPY --from=builder ./indy-sdk/libindy/target/release /usr/lib
