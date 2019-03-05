@@ -27,6 +27,10 @@ RUN cd /tmp && \
 RUN git clone https://github.com/hyperledger/indy-sdk.git && \
     cd ./indy-sdk/libindy && cargo build --release
 
-FROM alpine:latest
+FROM node:11-stretch-slim
+
+# Add libindy dependencies
+
+RUN apt-get update -qq && apt-get install -qq libzmq3-dev
 
 COPY --from=builder ./indy-sdk/libindy/target/release /usr/lib
